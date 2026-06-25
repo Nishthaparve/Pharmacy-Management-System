@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaCare - Pharmacy & Healthcare</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="logo">
+            <span class="logo-icon">💊</span>
+            <span class="logo-text">PharmaCare</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn" onclick="showHome()">Home</button>
+            <button class="nav-btn" onclick="showDashboard()">Dashboard</button>
+            <button class="nav-btn" onclick="showHistory()">History</button>
+            <button class="nav-btn pharmacist-only" id="pharmacistPanelBtn" onclick="showPharmacistPanel()">Pharmacist Panel</button>
+            <button class="nav-btn doctor-only" id="doctorPanelBtn" onclick="showDoctorPanel()">Doctor Panel</button>
+            <button class="nav-btn btn-cart" onclick="showCart()">Cart (<span id="cartCount">0</span>)</button>
+            <button class="nav-btn btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container" id="app">
+        
+        <!-- AUTH FORMS -->
+<div id="authForms" class="auth-container">
+    <div class="auth-wrapper">
+        <!-- Left Side - Branding & Introduction -->
+        <div class="auth-branding">
+            <div class="brand-logo">
+                <span class="logo-icon">💊</span>
+                <span class="brand-name">PharmaCare</span>
+            </div>
+            
+            <h1 class="brand-tagline">Your Health, Our Priority</h1>
+            
+            <p class="brand-description">
+                PharmaCare is a comprehensive healthcare platform that connects patients with 
+                trusted pharmacies and doctors. Order medicines, book appointments, and manage 
+                your health all in one place.
+            </p>
+            
+            <div class="brand-features">
+                <div class="feature-item">
+                    <span class="feature-icon">💊</span>
+                    <div>
+                        <h4>Order Medicines</h4>
+                        <p>Browse and order medicines from trusted pharmacies near you</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📅</span>
+                    <div>
+                        <h4>Book Appointments</h4>
+                        <p>Schedule appointments with qualified doctors instantly</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🏪</span>
+                    <div>
+                        <h4>Find Pharmacies</h4>
+                        <p>Locate nearby pharmacies with real-time directions</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <div>
+                        <h4>Track Health</h4>
+                        <p>View order history, appointments, and health dashboard</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="brand-stats">
+                <div class="stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Pharmacies</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Doctors</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">1000+</span>
+                    <span class="stat-label">Happy Patients</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Login/Register Form -->
+        <div class="form-card">
+            <div class="form-tabs">
+                <button class="tab-btn active" onclick="showLoginTab()">Login</button>
+                <button class="tab-btn" onclick="showRegisterTab()">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="form-content">
+                <h2>Welcome Back!</h2>
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <select id="loginType">
+                        <option value="patient">Patient</option>
+                        <option value="pharmacist">Pharmacist</option>
+                        <option value="doctor">Doctor</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="handleLogin()">Login</button>
+                <div class="form-footer">
+                    <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
+                </div>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="form-content" style="display:none;">
+                <h2>Reset Password</h2>
+                <p>Enter your email to receive a reset token</p>
+                <div class="form-group">
+                    <input type="email" id="resetEmail" placeholder="Email Address" required>
+                </div>
+                <button class="btn-primary" onclick="handleForgotPassword()">Send Reset Token</button>
+                <button class="btn-secondary" onclick="showLoginTab()">Back to Login</button>
+            </div>
+
+            <!-- Reset Password Form -->
+            <div id="resetPasswordForm" class="form-content" style="display:none;">
+                <h2>Set New Password</h2>
+                <div class="form-group">
+                    <input type="text" id="resetToken" placeholder="Reset Token" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="newPassword" placeholder="New Password (min 6 chars)" required>
+                </div>
+                <button class="btn-primary" onclick="handleResetPassword()">Reset Password</button>
+                <button class="btn-secondary" onclick="showLoginTab()">Back to Login</button>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="registerForm" class="form-content" style="display:none;">
+                <h2>Create Account</h2>
+                <div class="form-group">
+                    <select id="regType" onchange="toggleRegisterFields()">
+                        <option value="patient">Patient</option>
+                        <option value="pharmacist">Pharmacist</option>
+                        <option value="doctor">Doctor</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" id="regName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="regEmail" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPassword" placeholder="Password (min 6 chars)" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="regPhone" placeholder="Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="regAddress" placeholder="Street Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="regCity" placeholder="City (e.g., Pune, Mumbai)" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="regState" placeholder="State (e.g., Maharashtra)" required>
+                </div>
+                
+                <!-- Pharmacist Fields -->
+                <div id="pharmacistFields" style="display:none;">
+                    <div class="form-group">
+                        <input type="text" id="regPharmacyName" placeholder="Pharmacy Shop Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="regPharmacyLocation" placeholder="Pharmacy Location">
+                    </div>
+                </div>
+                
+                <!-- Doctor Fields -->
+                <div id="doctorFields" style="display:none;">
+                    <div class="form-group">
+                        <input type="text" id="regHospitalName" placeholder="Hospital Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="regHospitalLocation" placeholder="Hospital Location">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="regSpecialization" placeholder="Specialization">
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="handleRegister()">Create Account</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- PATIENT HOME -->
+        <div id="patientHome" style="display:none;">
+            <div class="hero-section">
+                <h1>Welcome to PharmaCare</h1>
+                <p id="healthcareThought" class="thought-text"></p>
+                <div class="hero-buttons">
+                    <button class="btn-begin" onclick="showOrderMedicine()">Order Medicine</button>
+                    <button class="btn-begin" onclick="showBookAppointment()">Book Appointment</button>
+                </div>
+            </div>
+            <!-- Add this after the hero section -->
+<div style="display: flex; gap: 1rem; margin-bottom: 1rem; justify-content: flex-end;">
+    <button onclick="refreshData()" style="background: white; color: var(--primary); border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 500;">
+        🔄 Refresh Data
+    </button>
+</div>
+            
+            <div class="search-section">
+                <div class="search-input-group">
+                    <input type="text" id="searchInput" placeholder="🔍 Search by location, hospital, doctor, or pharmacy..." onkeyup="if(event.key === 'Enter') searchProviders()">
+                    <button onclick="searchProviders()" class="btn-search">Search</button>
+                    <button onclick="getCurrentLocation()" class="btn-location">📍 Use My Location</button>
+                </div>
+                <div class="search-hints">
+                    <small>💡 Try searching: "Pune", "Akurdi", "City Hospital", "Dr. Sharma", or "Pharmacy"</small>
+                </div>
+            </div>
+            
+            <div id="orderMedicineSection">
+                <h2 style="color: white; margin-bottom: 1rem;">Pharmacies Near You</h2>
+                <div id="pharmacistsList" class="providers-grid"></div>
+                <div id="medicinesList" class="medicines-grid"></div>
+            </div>
+            
+            <div id="bookAppointmentSection" style="display:none;">
+                <h2 style="color: white; margin-bottom: 1rem;">Hospitals & Doctors</h2>
+                <div id="doctorsList" class="providers-grid"></div>
+            </div>
+        </div>
+
+        <!-- PHARMACIST PANEL -->
+        <div id="pharmacistPanel" style="display:none;">
+            <div class="panel-header">
+                <h2>Pharmacist Dashboard</h2>
+            </div>
+            
+            <div class="add-medicine-form">
+                <h3>Add New Medicine</h3>
+                <div class="form-row">
+                    <input type="text" id="medName" placeholder="Medicine Name" required>
+                    <input type="date" id="expiryDate" required>
+                    <input type="number" id="quantity" placeholder="Quantity" required>
+                    <input type="number" id="price" placeholder="Price ($)" step="0.01" required>
+                </div>
+                <textarea id="purpose" rows="3" placeholder="Purpose / Description"></textarea>
+                <button class="btn-primary" onclick="addMedicine()">Add Medicine</button>
+            </div>
+
+            <div class="medicines-section">
+                <h3>Your Added Medicines</h3>
+                <div id="pharmacistMedicinesList" class="medicines-grid"></div>
+            </div>
+
+            <div id="pharmacistOrders" class="orders-section"></div>
+        </div>
+
+        <!-- DOCTOR PANEL -->
+        <div id="doctorPanel" style="display:none;">
+            <div class="panel-header">
+                <h2>Doctor Dashboard</h2>
+            </div>
+            <div id="doctorAppointments" class="orders-section"></div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dashboardView" style="display:none;">
+            <div class="dashboard-stats" id="dashboardStats"></div>
+            <div id="dashboardContent"></div>
+        </div>
+
+        <!-- HISTORY -->
+        <div id="historyView" style="display:none;">
+            <h2 style="color: white;">Your Activity History</h2>
+            <div id="historyContent" class="orders-grid"></div>
+        </div>
+
+        <!-- CART MODAL -->
+        <div id="cartModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Your Cart</h3>
+                    <span class="close" onclick="closeCart()">&times;</span>
+                </div>
+                <div id="cartItems"></div>
+                <div class="cart-total">
+                    <strong>Total: $<span id="cartTotal">0</span></strong>
+                </div>
+                <button class="btn-primary" onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+
+        <!-- TOAST -->
+        <div id="toast" class="toast hidden"></div>
+    </div>
+        <!-- ============================================ -->
+    <!-- CHATBOT - Floating Button & Chat Window      -->
+    <!-- ============================================ -->
+
+    <!-- Chatbot Toggle Button -->
+    <button class="chatbot-toggle" onclick="toggleChatbot()">
+        💬
+    </button>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <span>🤖</span>
+                <span>PharmaCare AI Assistant</span>
+            </div>
+            <button class="chatbot-close" onclick="toggleChatbot()">✕</button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="chat-message bot">
+                <div class="message-content">
+                    👋 Hello! I'm your PharmaCare AI Assistant.<br>
+                    How can I help you today?
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-input-area">
+            <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()">Send</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+    <script src="script.js"></script>
+</body>
+</html>
